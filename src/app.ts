@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import defaultRoute from './routes/default.router';
 import mongoSanitize from 'express-mongo-sanitize';
-import { dataLimit } from './utils/limiter';
+import { dataLimit, authLimit } from './utils/limiter';
 import logger from './middleware/logger';
 import proxy from 'express-http-proxy';
 import { ProxyConfig } from './config';
@@ -18,6 +18,7 @@ if (<string>process.env.NODE_ENV === 'production') {
   app.use(logger('dev'));
 }
 
+// Define microservice urls for communication/proxying
 let usersUrl: string;
 let contactsUrl: string;
 let docsUrl: string;
@@ -33,12 +34,10 @@ if (<string>process.env.NODE_ENV === 'production') {
 }
 
 // Gateway routes and default route
-// TODO - probably move to controllers
-app.use('/api/users', dataLimit, proxy(usersUrl));
-app.use('/api/security', dataLimit, proxy(usersUrl));
+app.use('/api/users', authLimit, proxy(usersUrl));
+app.use('/api/security', authLimit, proxy(usersUrl));
 app.use('/api/contacts', dataLimit, proxy(contactsUrl));
 app.use('/api/docs/', dataLimit, proxy(docsUrl));
-// app.use('/api/docs', (req: Request, res: Response) => res.redirect('/api/docs/'));
 app.use('/api', dataLimit, defaultRoute);
 
 // Root route redirects to /api default route
