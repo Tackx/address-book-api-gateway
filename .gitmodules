@@ -1,0 +1,6 @@
+[submodule "ms-api-auth"]
+	path = ms-api-auth
+	url = https://Tackx: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@github.com/Tackx/ms-api-auth
+[submodule "ms-api-contacts"]
+	path = ms-api-contacts
+	url = https://Tackx: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@github.com/Tackx/ms-api-contacts

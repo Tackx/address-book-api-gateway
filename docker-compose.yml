@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  address-book-api-network:
+    name: address-book-api-network
+
+services: 
+
+  # Gateway service
+  gw:
+    container_name: gw
+    restart: unless-stopped
+    build:
+      context: .
+      target: development
+    env_file: 
+      - .env
+    ports: 
+      - 2001:2001
+    networks:
+      - address-book-api-network
+    volumes:
+      - ./:/usr/src/gw
+      - /usr/src/gw/node_modules
+      - gw-logs:/usr/src/gw/logs
+    command: npm run start:dev
+
+volumes: 
+  gw-logs:
