@@ -9,6 +9,7 @@ services:
   # Gateway service
   gw:
     container_name: gw
+    user: 0:0
     restart: unless-stopped
     build:
       context: .
